@@ -17,17 +17,26 @@ const hookClick = (e) => {
         console.log('not handle origin', origin)
     }
 }
+let newWin=window.open();
+console.log(newWin);
 const originalWindowOpen = window.open;
 window.open = function (url, target, features) {
-   console.log(url);
-  console.log(target);
-  console.log(features);
-   // return originalWindowOpen.call(window, url, target, features);
-  let title=target;
-  let lable=features;
-  const { WebviewWindow } = window.__TAURI__.webviewWindow
+  console.log('open', url, target, features)
+  location.href = url 
+ // return originalWindowOpen(url,target, features);  
+  
+}
+
+
+document.addEventListener('click', hookClick, { capture: true })
+
+ 
+const { WebviewWindow } = window.__TAURI__.webviewWindow
+const winOpen = (menuUrl, title, lable) => {
+
+
   const webview = new WebviewWindow(lable, {
-    url: url,
+    url: menuUrl,
     x: 500,
     y: 500,
     width: 800,
@@ -50,12 +59,6 @@ window.open = function (url, target, features) {
     console.log('new webview error', e)
   })
 }
-
-
-// document.addEventListener('click', hookClick, { capture: true })
-
- 
-
 
 //* 注入样式表 */
 window.addEventListener('load', function () {
@@ -149,8 +152,8 @@ window.addEventListener('load', function () {
     if (mm) {
       mm.addEventListener('click', () => {
         // window.open(menuUrl, '_blank', features)
-        // winOpen(menuUrl, menuTitle, menuId)
-        window.open(menuUrl, menuTitle, menuId)
+        winOpen(menuUrl, menuTitle, menuId)
+        // window.open(menuUrl, menuTitle, menuId)
       })
     }
   }
