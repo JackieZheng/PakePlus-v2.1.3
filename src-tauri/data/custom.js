@@ -13,17 +13,46 @@ const hookClick = (e) => {
         e.preventDefault()
         console.log('handle origin', origin)
         location.href = origin.href
-    } else {
+    } else {         
         console.log('not handle origin', origin)
     }
 }
-
+const originalWindowOpen = window.open;
 window.open = function (url, target, features) {
-    console.log('open', url, target, features)
-    location.href = url
+   console.log(url);
+  console.log(target);
+  console.log(features);
+   // return originalWindowOpen.call(window, url, target, features);
+  let title=target;
+  let lable=features;
+  const { WebviewWindow } = window.__TAURI__.webviewWindow
+  const webview = new WebviewWindow(lable, {
+    url: url,
+    x: 500,
+    y: 500,
+    width: 800,
+    height: 600,
+    focus: true,
+    title: title,
+    alwaysOnTop: false,
+    center: true,
+    resizable: true,
+    transparent: false,
+    visible: true,
+  })
+  webview.once('tauri://created', function (e) {
+    e.setIcon('');
+    // webview successfully created
+    console.log('new webview created')
+  })
+  webview.once('tauri://error', function (e) {
+    // an error happened creating the webview
+    console.log('new webview error', e)
+  })
 }
 
-document.addEventListener('click', hookClick, { capture: true })
+
+// document.addEventListener('click', hookClick, { capture: true })
 
  
 
@@ -119,8 +148,9 @@ window.addEventListener('load', function () {
       `,location=no,toolbar=no,menubar=no`
     if (mm) {
       mm.addEventListener('click', () => {
-        window.open(menuUrl, '_blank', features)
+        // window.open(menuUrl, '_blank', features)
         // winOpen(menuUrl, menuTitle, menuId)
+        window.open(menuUrl, menuTitle, menuId)
       })
     }
   }
