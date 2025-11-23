@@ -13,31 +13,22 @@ const hookClick = (e) => {
         e.preventDefault()
         console.log('handle origin', origin)
         location.href = origin.href
-    } else {         
+    } else {
         console.log('not handle origin', origin)
     }
 }
- 
- 
-
 window.open = function (url, target, features) {
-  console.log('open', url, target, features)
-  // location.href = url 
- // return originalWindowOpen(url,target, features);  
-  
-  // invoke('open_url', { url: url })
-  
-
+    console.log('open', url, target, features)
+    location.href = url
 }
-
 
 document.addEventListener('click', hookClick, { capture: true })
 
+/* 设置中要选中 TaurApi  */
 
- 
 const { WebviewWindow } = window.__TAURI__.webviewWindow
 const winOpen = (menuUrl, title, lable) => {
-  
+
   const webview = new WebviewWindow(lable, {
     url: menuUrl,
     x: 500,
@@ -53,7 +44,7 @@ const winOpen = (menuUrl, title, lable) => {
     visible: true,
   })
   webview.once('tauri://created', function (e) {
-    e.setIcon('');
+
     // webview successfully created
     console.log('new webview created')
   })
