@@ -17,24 +17,27 @@ const hookClick = (e) => {
         console.log('not handle origin', origin)
     }
 }
-let newWin=window.open();
-console.log(newWin);
-const originalWindowOpen = window.open;
+ 
+ 
+
 window.open = function (url, target, features) {
   console.log('open', url, target, features)
-  location.href = url 
+  // location.href = url 
  // return originalWindowOpen(url,target, features);  
   
+  // invoke('open_url', { url: url })
+  
+
 }
 
 
 document.addEventListener('click', hookClick, { capture: true })
 
+
  
 const { WebviewWindow } = window.__TAURI__.webviewWindow
 const winOpen = (menuUrl, title, lable) => {
-
-
+  
   const webview = new WebviewWindow(lable, {
     url: menuUrl,
     x: 500,
