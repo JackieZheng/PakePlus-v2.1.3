@@ -25,36 +25,7 @@ window.open = function (url, target, features) {
 
 document.addEventListener('click', hookClick, { capture: true })
 
-
-const { WebviewWindow } = window.__TAURI__.webviewWindow
-const winOpen = (menuUrl, title, lable) => {
-
-
-  const webview = new WebviewWindow(lable, {
-    url: menuUrl,
-    x: 500,
-    y: 500,
-    width: 800,
-    height: 600,
-    focus: true,
-    title: title,
-    alwaysOnTop: false,
-    center: true,
-    resizable: true,
-    transparent: false,
-    visible: true,
-  })
-  webview.once('tauri://created', function (e) {
-    e.setIcon('');
-    // webview successfully created
-    console.log('new webview created')
-  })
-  webview.once('tauri://error', function (e) {
-    // an error happened creating the webview
-    console.log('new webview error', e)
-  })
-}
-
+ 
 
 
 //* 注入样式表 */
@@ -148,8 +119,8 @@ window.addEventListener('load', function () {
       `,location=no,toolbar=no,menubar=no`
     if (mm) {
       mm.addEventListener('click', () => {
-        // window.open(menuUrl, '_blank', features)
-        winOpen(menuUrl, menuTitle, menuId)
+        window.open(menuUrl, '_blank', features)
+        // winOpen(menuUrl, menuTitle, menuId)
       })
     }
   }
