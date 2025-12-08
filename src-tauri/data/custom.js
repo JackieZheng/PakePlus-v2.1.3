@@ -1,25 +1,25 @@
 window.addEventListener("DOMContentLoaded",()=>{const t=document.createElement("script");t.src="https://www.googletagmanager.com/gtag/js?id=G-W5GKHM0893",t.async=!0,document.head.appendChild(t);const n=document.createElement("script");n.textContent="window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-W5GKHM0893');",document.body.appendChild(n)});// very important, if you don't know what it is, don't touch it
 // 非常重要，不懂代码不要动，这里可以解决80%的问题，也可以生产1000+的bug
 const hookClick = (e) => {
-    const origin = e.target.closest('a')
-    const isBaseTargetBlank = document.querySelector(
-        'head base[target="_blank"]'
-    )
-    console.log('origin', origin, isBaseTargetBlank)
-    if (
-        (origin && origin.href && origin.target === '_blank') ||
-        (origin && origin.href && isBaseTargetBlank)
-    ) {
-        e.preventDefault()
-        console.log('handle origin', origin)
-        location.href = origin.href
-    } else {
-        console.log('not handle origin', origin)
-    }
+  const origin = e.target.closest('a')
+  const isBaseTargetBlank = document.querySelector(
+    'head base[target="_blank"]'
+  )
+  console.log('origin', origin, isBaseTargetBlank)
+  if (
+    (origin && origin.href && origin.target === '_blank') ||
+    (origin && origin.href && isBaseTargetBlank)
+  ) {
+    e.preventDefault()
+    console.log('handle origin', origin)
+    location.href = origin.href
+  } else {
+    console.log('not handle origin', origin)
+  }
 }
 window.open = function (url, target, features) {
-    console.log('open', url, target, features)
-    location.href = url
+  console.log('open', url, target, features)
+  location.href = url
 }
 
 document.addEventListener('click', hookClick, { capture: true })
@@ -81,6 +81,9 @@ window.addEventListener('load', function () {
       #examTable thead > tr > th .exam-checkbox>img{margin: 0 auto;}/* 方案全选  图片 */
 
       #app>.layout-main-container>.layout-main-content>.container{height:100% !important;}
+      // #app>.layout-main-container>.layout-main-content{height:100% !important;}
+      #app>.layout-main-container>.layout-main-content>.primary-college-wrap{height:100% !important;}
+      #app>.layout-main-container>.layout-main-content>.primary-college-wrap>.inner{height:100% !important;}
 
       .plan-num-diff .num{display: inline-block !important;margin-left: 10px;border-width: 2px ;border-style: solid;border-radius: 5px;min-width: 30px !important;text-align: center;display: inline-block;padding: 0 2px;}
       .plan-num-diff .tag{display:none !important;}
@@ -108,7 +111,7 @@ window.addEventListener('load', function () {
   }
 
   //左侧工具栏添加常用工具
-  const appendMenu = (menuId,menuIcon, menuTitle, menuUrl) => {
+  const appendMenu = (menuId, menuIcon, menuTitle, menuUrl) => {
     let mm = document.createRange().createContextualFragment(
       `
     <div id="` +
@@ -116,7 +119,7 @@ window.addEventListener('load', function () {
       `" class="sub-menu-box">
       <div  class="sub-menu-item" style="padding-left: 35px; ">
         <div style="text-decoration: none;font-size: 12px;cursor: pointer;line-height:26px;margin: 20px 0;">
-          ` +menuIcon+menuTitle +
+          ` + menuIcon + menuTitle +
       `
         </div>
       </div>
@@ -174,7 +177,7 @@ window.addEventListener('load', function () {
     'https://www.doubao.com/bot/Wto8nNNg'
   )
   // 高报快答
-  appendMenu('reply',  '🧑‍💻','高报知识快答助手', 'https://doubao.com/bot/XXIJp72c')
+  appendMenu('reply', '🧑‍💻', '高报知识快答助手', 'https://doubao.com/bot/XXIJp72c')
   // 体检受限代码专业
   appendMenu(
     'limit',
@@ -183,13 +186,13 @@ window.addEventListener('load', function () {
     'https://mp.weixin.qq.com/s/JBsNpw1F6RMoS_ciEJRccA'
   )
   // 最新版本
-  appendMenu('download', '☘️','检查下载最新版本', 'https://pan.baidu.com/s/1TSkbg8atgHJjQtbjMUvmww?pwd=g75g')
+  appendMenu('download', '☘️', '检查下载最新版本', 'https://pan.baidu.com/s/1TSkbg8atgHJjQtbjMUvmww?pwd=g75g')
 
   // 录取日程
-  appendMenu('schedule', '📆','录取日程结果查询', 'https://gaokao.chsi.com.cn/z/gkbmfslq/lqjg.jsp')
+  appendMenu('schedule', '📆', '录取日程结果查询', 'https://gaokao.chsi.com.cn/z/gkbmfslq/lqjg.jsp')
 
   // 特殊类型招生
-  appendMenu('tszs', '🌞','阳光高考特殊招生', ' https://gaokao.chsi.com.cn/gkzt/tszs')
+  appendMenu('tszs', '🌞', '阳光高考特殊招生', ' https://gaokao.chsi.com.cn/gkzt/tszs')
 
 
 
@@ -248,6 +251,7 @@ window.addEventListener('load', function () {
   const observer = new MutationObserver(function (mutations, observer) {
     fixCheckAll();
     fixEls();
+    fixIntention();
   })
 
   const body = document.querySelector('body')
@@ -267,7 +271,13 @@ window.addEventListener('load', function () {
       chkAllBox.append('全选');
     }
   }
-
+  /* 意向专业类型 只是优先 */
+  const fixIntention = () => {
+    let span = document.querySelector("#app > div > div.layout-main-content .intention-adjustment .form-item span")
+    if (span?.innerText === '意向专业类型') {
+      span.innerText = '意向专业类型(优先)';
+    }
+  }
 
   /* 处理el层错位问题 Start*/
   const zoomScale = 0.85
