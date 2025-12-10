@@ -1,5 +1,6 @@
 window.addEventListener("DOMContentLoaded",()=>{const t=document.createElement("script");t.src="https://www.googletagmanager.com/gtag/js?id=G-W5GKHM0893",t.async=!0,document.head.appendChild(t);const n=document.createElement("script");n.textContent="window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-W5GKHM0893');",document.body.appendChild(n)});// very important, if you don't know what it is, don't touch it
 // 非常重要，不懂代码不要动，这里可以解决80%的问题，也可以生产1000+的bug
+
 const hookClick = (e) => {
   const origin = e.target.closest('a')
   const isBaseTargetBlank = document.querySelector(
@@ -27,6 +28,9 @@ document.addEventListener('click', hookClick, { capture: true })
 /* 设置中要选中 TaurApi  */
 
 const { WebviewWindow } = window.__TAURI__.webviewWindow
+const { downloadDir } = window.__TAURI__.path
+const { invoke } = window.__TAURI__.core
+
 const winOpen = (menuUrl, title, lable) => {
 
   const webview = new WebviewWindow(lable, {
@@ -53,6 +57,11 @@ const winOpen = (menuUrl, title, lable) => {
     console.log('new webview error', e)
   })
 }
+
+
+
+
+
 
 //* 注入样式表 */
 window.addEventListener('load', function () {
@@ -248,10 +257,71 @@ window.addEventListener('load', function () {
     })
   }
 
+
+  const showDownloadDir = () => {
+    let downBoxes = document.querySelectorAll('.study-down-box .footer')
+    if (downBoxes && downBoxes.length > 0) {
+      downBoxes.forEach(ele => {
+        insertDownPath(ele);
+      })
+    }
+    let liDown=document.querySelector('body>ul.el-dropdown-menu')
+    let insertBefore=liDown?.querySelector('.popper__arrow')
+    if(liDown&&insertBefore&&!liDown.innerText.includes('打开下载目录')){
+      console.log(download);
+      const span = document.createElement('span');
+      span.innerText = '打开下载目录';
+      span.className='el-dropdown-menu__item';
+      span.style.color = 'red';
+      span.style.cursor = 'pointer';
+       insertBefore.before(span)
+       span.addEventListener('click', () => {
+        if ('__TAURI__' in window) {
+          invoke('run_command', { command: 'explorer ' + downloadFilePath })
+        }
+
+      })
+    }
+  }
+  let downloadFilePath = '';
+  let download = downloadDir().then((data) => {
+    console.log(data);
+    downloadFilePath = data;
+    // return data;
+  })
+  /**
+   *@description: 显示下载地址
+   *@author: JackieZheng
+   *@date: 2025-12-10 17:59:12
+  */
+  const insertDownPath = (ele) => {
+    if (!ele.innerText.includes('默认保存路径：')) {
+      console.log(download);
+      const span = document.createElement('span');
+      span.innerText = '默认保存路径：' + downloadFilePath;
+      span.style.color = 'red';
+      span.style.cursor = 'pointer';
+      ele.prepend(span)
+      span.addEventListener('click', () => {
+        if ('__TAURI__' in window) {
+          invoke('run_command', { command: 'explorer ' + downloadFilePath })
+        }
+
+      })
+    }
+
+
+  }
+
+
+
+
+
   const observer = new MutationObserver(function (mutations, observer) {
     fixCheckAll();
     fixEls();
     fixIntention();
+    showDownloadDir();
   })
 
   const body = document.querySelector('body')
@@ -266,7 +336,7 @@ window.addEventListener('load', function () {
   /* 全选框加全选提示 */
   const fixCheckAll = () => {
     let chkAllBox = document.querySelector('.exam-table>.header>.exam-checkbox') || document.querySelector("#examTable thead > tr > th .exam-checkbox");
-    console.log(chkAllBox);
+    // console.log(chkAllBox);
     if (chkAllBox && !chkAllBox.innerText.includes('全选')) {
       chkAllBox.append('全选');
     }
@@ -536,6 +606,13 @@ window.addEventListener('load', function () {
     })
   }
 
+
+
+
+
+
+
   /* 专业备注关键词 自动输入 End */
 })
+
 
