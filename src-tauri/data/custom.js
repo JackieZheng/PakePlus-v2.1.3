@@ -89,8 +89,14 @@ window.addEventListener('load', function () {
       #examTable thead > tr > th .exam-checkbox{flex-wrap: wrap;}/* 方案全选 选择框 */
       #examTable thead > tr > th .exam-checkbox>img{margin: 0 auto;}/* 方案全选  图片 */
 
-      #app>.layout-main-container>.layout-main-content>.container{height:100% !important;}
-      // #app>.layout-main-container>.layout-main-content{height:100% !important;}
+      #app>.layout-main-container>.layout-main-content{height:100% !important;}
+      #app>.layout-main-container>.header-main~.layout-main-content{height: calc(100% - 55px) !important;}
+      #app>.layout-main-container>.layout-main-content>.container{height: 100%;}
+
+      #app>.layout-main-container>.layout-main-content>.container>.commonTop{height:calc(100% - 0px) !important;}
+      #app>.layout-main-container>.layout-main-content>.container>.commonTop>.commonLeft{height:calc(100% - 0px) !important;overflow: auto;}
+      #app>.layout-main-container>.layout-main-content>.container>.commonTop>.commonRight{height:calc(100% - 0px) !important;overflow: auto;}
+
       #app>.layout-main-container>.layout-main-content>.primary-college-wrap{height:100% !important;}
       #app>.layout-main-container>.layout-main-content>.primary-college-wrap>.inner{height:100% !important;}
 
@@ -194,14 +200,15 @@ window.addEventListener('load', function () {
     '体检受限代码专业',
     'https://mp.weixin.qq.com/s/JBsNpw1F6RMoS_ciEJRccA'
   )
-  // 最新版本
-  appendMenu('download', '☘️', '检查下载最新版本', 'https://pan.baidu.com/s/1TSkbg8atgHJjQtbjMUvmww?pwd=g75g')
 
   // 录取日程
   appendMenu('schedule', '📆', '录取日程结果查询', 'https://gaokao.chsi.com.cn/z/gkbmfslq/lqjg.jsp')
 
   // 特殊类型招生
   appendMenu('tszs', '🌞', '阳光高考特殊招生', ' https://gaokao.chsi.com.cn/gkzt/tszs')
+
+  // 最新版本
+  appendMenu('download', '☘️', '检查下载最新版本', 'https://pan.baidu.com/s/1TSkbg8atgHJjQtbjMUvmww?pwd=g75g')
 
 
 
@@ -267,7 +274,7 @@ window.addEventListener('load', function () {
     }
     let liDown=document.querySelector('body>ul.el-dropdown-menu')
     let insertBefore=liDown?.querySelector('.popper__arrow')
-    if(liDown&&insertBefore&&!liDown.innerText.includes('打开下载目录')){
+    if(liDown&&liDown.innerText.includes('规划师版方案')&&insertBefore&&!liDown.innerText.includes('打开下载目录')){
       console.log(download);
       const span = document.createElement('span');
       span.innerText = '打开下载目录';
